@@ -28,7 +28,7 @@ Backend:
 - Node.js
 - concurrently
 - nodemon
-  -colors
+- colors
 
 Frontend:
 
