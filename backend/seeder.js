@@ -55,6 +55,7 @@ const destoryData = async () => {
 
 //seeder script args ($ node backend/seeder -d)
 //these are added as an npm scripts (data:import data:destroy)
+
 if (process.argv[2] === "-d") {
   destoryData();
 } else {
