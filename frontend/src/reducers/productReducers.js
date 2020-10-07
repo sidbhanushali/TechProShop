@@ -2,6 +2,9 @@ import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
   PRODUCT_LIST_FAIL,
+  PRODUCT_DETAILS_REQUEST,
+  PRODUCT_DETAILS_SUCCESS,
+  PRODUCT_DETAILS_FAIL,
 } from "../constants/productConstants.js";
 
 //product list reducer -- handles the state for the product list on the homepage
@@ -20,6 +23,30 @@ export const productListReducer = (state = { products: [] }, action) => {
 
     //product list fails -
     case PRODUCT_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+// PRODUCT DETAILS REDUCER
+
+export const productDetailReducer = (
+  state = { product: { reviews: [] } },
+  action
+) => {
+  //switch statement to evaluate the "type" in the action object
+  switch (action.type) {
+    //making the request ->
+    case PRODUCT_DETAILS_REQUEST:
+      return { loading: true, ...state };
+
+    //product DETAIL success - successful response
+    case PRODUCT_DETAILS_SUCCESS:
+      return { loading: false, product: action.payload };
+
+    //product DETAIL fails -
+    case PRODUCT_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

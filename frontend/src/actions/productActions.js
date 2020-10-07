@@ -3,7 +3,10 @@ import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
   PRODUCT_LIST_FAIL,
-} from "../constants/productConstants";
+  PRODUCT_DETAILS_REQUEST,
+  PRODUCT_DETAILS_SUCCESS,
+  PRODUCT_DETAILS_FAIL,
+} from "../constants/productConstants.js";
 
 export const listProducts = () => async (dispatch) => {
   try {
@@ -20,6 +23,32 @@ export const listProducts = () => async (dispatch) => {
     //set payload to check for the generic error message and for the custom error message from errorHandler middleware
     dispatch({
       type: PRODUCT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+// PRODUCT DETAILS ACTION
+
+//needs to take an ID param
+export const listProductDetails = (id) => async (dispatch) => {
+  try {
+    //set initial state and axios req
+    dispatch({ type: PRODUCT_DETAILS_REQUEST });
+    //get productsList JSON from API
+    const { data } = await axios.get(`/api/products/${id}`);
+    //set productList state in the store to the data we got from API
+    dispatch({
+      type: PRODUCT_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    //set payload to check for the generic error message and for the custom error message from errorHandler middleware
+    dispatch({
+      type: PRODUCT_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
