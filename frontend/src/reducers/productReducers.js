@@ -31,7 +31,7 @@ export const productListReducer = (state = { products: [] }, action) => {
 
 // PRODUCT DETAILS REDUCER
 
-export const productDetailReducer = (
+export const productDetailsReducer = (
   state = { product: { reviews: [] } },
   action
 ) => {
