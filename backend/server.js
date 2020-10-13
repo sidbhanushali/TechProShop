@@ -7,12 +7,14 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 //import routes
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
-import userRoutes from "./routes/productRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 const app = express();
 
 connectDB();
+
+app.use(express.json());
 
 //routes
 app.use("/api/products", productRoutes);
