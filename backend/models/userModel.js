@@ -34,6 +34,18 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+//this method executes a callback "pre" save
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+
+  //salt is what hashes the password
+  const salt = await bcrypt.genSalt(10);
+  //converts the plain text password into the hashed password to be entered right before saving
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
 const User = mongoose.model("User", userSchema);
 
 export default User;

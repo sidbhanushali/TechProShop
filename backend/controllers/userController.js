@@ -26,11 +26,47 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+//controller for POST /api/users --> create new user
+const registerUser = asyncHandler(async (req, res) => {
+  // as per model
+  const { name, email, password } = req.body;
+
+  //check if emails already taken
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+  //create new user with name email PW (will be encrypted with mongoose MW)
+  const user = await User.create({
+    name,
+    email,
+    password,
+  });
+
+  if (user) {
+    //respond with 201(something was created) & new user info wesaved
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
 //controller for GET api/users/profile PRIVATE ROUTE
 const getUserProfile = asyncHandler(async (req, res) => {
+  //req.user._id populated by auth Middlware
   const user = await User.findById(req.user._id);
 
   if (user) {
+    //return logged in user data
     res.json({
       _id: user._id,
       name: user.name,
@@ -43,4 +79,4 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, getUserProfile };
+export { authUser, registerUser, getUserProfile };
