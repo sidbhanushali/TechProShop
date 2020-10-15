@@ -13,7 +13,7 @@ import { protectRoute } from "../middleware/authMiddleware.js";
 
 //create new user POST route
 router.post("/", registerUser);
-//login POST route -- email and PW
+//login POST route -- email & PW
 router.post("/login", authUser);
 
 //GET user profile route --> ProtectedRoute MW: Id in token
