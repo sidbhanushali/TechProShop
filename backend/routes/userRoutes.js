@@ -4,6 +4,7 @@ import {
   authUser,
   registerUser,
   getUserProfile,
+  updateUserProfile,
 } from "../controllers/userController.js";
 //auth middleware
 import { protectRoute } from "../middleware/authMiddleware.js";
@@ -14,7 +15,10 @@ import { protectRoute } from "../middleware/authMiddleware.js";
 router.post("/", registerUser);
 //login POST route -- email and PW
 router.post("/login", authUser);
+
 //GET user profile route --> ProtectedRoute MW: Id in token
 router.get("/profile", protectRoute, getUserProfile);
+//PUT update user profile route --> ProtectedRoute MW: Id in token
+router.put("/profile", protectRoute, updateUserProfile);
 
 export default router;
