@@ -29,6 +29,7 @@ const ProfileScreen = ({ location, history }) => {
       history.push("/login");
     } else {
       if (!user.name) {
+        //  pass profile to hit /api/users/profile endpoint instead of :id
         dispatch(getUserDetails("profile"));
       } else {
         setName(user.name);
@@ -52,6 +53,7 @@ const ProfileScreen = ({ location, history }) => {
         <h2>Update Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
+        {/* on sucess globalState show message  */}
         {success && <Message variant='success'>Profile Updated</Message>}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>

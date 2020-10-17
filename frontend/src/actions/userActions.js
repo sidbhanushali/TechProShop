@@ -135,6 +135,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   }
 };
 
+//pass userobj ({ id: user._id, name, email, password })
 export const updateUserProfile = (user) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -145,6 +146,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
+    //add token to header to access protected API route
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -152,6 +154,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       },
     };
 
+    //pass user obj/update data as arg
     const { data } = await axios.put(`/api/users/profile`, user, config);
 
     dispatch({
