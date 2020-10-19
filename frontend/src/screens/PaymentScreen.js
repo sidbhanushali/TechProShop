@@ -26,6 +26,7 @@ const PaymentScreen = ({ history }) => {
 
   return (
     <FormContainer>
+      {/* pass previous steps to validate sequence */}
       <CheckoutSteps step1 step2 step3 />
       <h1>Payment Method</h1>
       <Form onSubmit={submitHandler}>
