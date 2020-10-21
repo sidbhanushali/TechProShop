@@ -24,7 +24,7 @@ const OrderScreen = ({ match }) => {
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
   }
-  //comes from /api/order/:id
+  //make sure orderID is same as one in URL
   useEffect(() => {
     if (!order || order._id !== orderId) {
       dispatch(getOrderDetails(orderId));
