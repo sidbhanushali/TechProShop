@@ -5,9 +5,10 @@ import {
   registerUser,
   getUserProfile,
   updateUserProfile,
+  getUsers,
 } from "../controllers/userController.js";
 //auth middleware
-import { protectRoute } from "../middleware/authMiddleware.js";
+import { protectRoute, checkAdmin } from "../middleware/authMiddleware.js";
 
 //top level route is /api/users
 
@@ -20,5 +21,8 @@ router.post("/login", authUser);
 router.get("/profile", protectRoute, getUserProfile);
 //PUT update user profile route --> ProtectedRoute MW: Id in token
 router.put("/profile", protectRoute, updateUserProfile);
+
+//GET ROUTE for get all users --> PROTECT ROUTE &ADMINS ONLY
+router.get("/", protectRoute, checkAdmin, getUsers);
 
 export default router;
