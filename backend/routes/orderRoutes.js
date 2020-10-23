@@ -4,6 +4,7 @@ import {
   addOrderItems,
   getOrderById,
   updateOrderToPaid,
+  getMyOrders,
 } from "../controllers/orderController.js";
 import { protectRoute } from "../middleware/authMiddleware.js";
 
@@ -11,6 +12,9 @@ import { protectRoute } from "../middleware/authMiddleware.js";
 
 //POST route for /api/orders --> create new order
 router.post("/", protectRoute, addOrderItems);
+
+//GET route for /api/orders/myorders --> gets all order objs for logged in user @profile page
+router.get("/myorders", protectRoute, getMyOrders);
 
 //GET route for /api/orders/:id --> create new order
 router.get("/:id", protectRoute, getOrderById);

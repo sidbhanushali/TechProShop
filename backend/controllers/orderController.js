@@ -1,9 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
 
-// @desc
 //controller for POST /api/orders --> it Creates a new order
-
 const addOrderItems = asyncHandler(async (req, res) => {
   //destructure order form data from req body
   const {
@@ -38,9 +36,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get order by ID
-// @route   GET /api/orders/:id
-// @access  Private
+//Controller for  GET /api/orders/:id -->   Get order by ID
 const getOrderById = asyncHandler(async (req, res) => {
   //id comes from URL param
   //from the user by ID, populate the name and email
@@ -57,9 +53,8 @@ const getOrderById = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Update order to paid
-// @route   GET /api/orders/:id/pay
-// @access  Private
+// controller for PUT /api/orders/:id/pay -->  an admin to Update order to paid
+
 const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
@@ -82,4 +77,11 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
   }
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid };
+//controller for  GET /api/orders/myorders --> Get myOrders in user profile page
+
+const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+  res.json(orders);
+});
+
+export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };
