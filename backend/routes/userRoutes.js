@@ -6,6 +6,7 @@ import {
   getUserProfile,
   updateUserProfile,
   getUsers,
+  deleteUser,
 } from "../controllers/userController.js";
 //auth middleware
 import { protectRoute, checkAdmin } from "../middleware/authMiddleware.js";
@@ -24,5 +25,8 @@ router.put("/profile", protectRoute, updateUserProfile);
 
 //GET ROUTE for get all users --> PROTECT ROUTE &ADMINS ONLY
 router.get("/", protectRoute, checkAdmin, getUsers);
+
+//DELETE ROUTE to yeet a user --> PROTECT ROUTE &ADMINS ONLY
+router.delete("/:id", protectRoute, checkAdmin, deleteUser);
 
 export default router;
