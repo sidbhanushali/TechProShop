@@ -44,4 +44,4 @@ const checkAdmin = (req, res, next) => {
   }
 };
 
-export { protect, checkAdmin };
+export { protectRoute, checkAdmin };
