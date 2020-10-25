@@ -124,6 +124,43 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
+//controller for  GET /api/users/:id --> Gets User By Id for Admin edit user(Private+Admin route)
+const getUserById = asyncHandler(async (req, res) => {
+  //dont include the password when returning the queried user object
+  const user = await User.findById(req.params.id).select("-password");
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const updateUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  //if user is found update the properties in the user object (besides the password, we deselected) with the new info in the req.body
+  if (user) {
+    //if nothing for that property was updated, then keep the original property info that was in the user object
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 export {
   authUser,
   registerUser,
@@ -131,4 +168,6 @@ export {
   updateUserProfile,
   getUsers,
   deleteUser,
+  getUserById,
+  updateUserById,
 };
