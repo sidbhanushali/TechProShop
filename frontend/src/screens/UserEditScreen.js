@@ -20,7 +20,7 @@ const UserEditScreen = ({ match, history }) => {
   const { loading, error, user } = userDetails;
 
   useEffect(() => {
-    if (!user.name || user._id !== userId) {
+    if (!user || user._id !== userId) {
       dispatch(getUserDetails(userId));
     } else {
       setName(user.name);
