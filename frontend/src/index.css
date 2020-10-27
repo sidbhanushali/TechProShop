@@ -19,3 +19,12 @@ h2 {
 .rating span {
   margin: 0.1rem;
 }
+
+Button {
+  transition: 0.2s ease-in !important;
+  border-radius: 0.1rem !important;
+}
+
+Button:hover {
+  transform: scale(1.1) !important;
+}
