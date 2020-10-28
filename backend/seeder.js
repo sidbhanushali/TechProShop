@@ -32,7 +32,7 @@ const importData = async () => {
 
     await productModel.insertMany(sampleProducts);
 
-    console.log("data imported".cyan.inverse);
+    console.log("HEY data was imported".cyan.inverse);
   } catch (error) {
     console.error(`Error: ${error.message}`.red);
     process.exit(1);
@@ -54,8 +54,8 @@ const destoryData = async () => {
 };
 
 //seeder script args ($ node backend/seeder -d)
-//these are added as an npm scripts (data:import data:destroy)
-
+//these are added as an npm scripts in package.json (data:import data:destroy)
+//npm run data:import/destory
 if (process.argv[2] === "-d") {
   destoryData();
 } else {
