@@ -5,6 +5,9 @@ import {
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_SUCCESS,
+  PRODUCT_DELETE_FAIL,
 } from "../constants/productConstants.js";
 
 //product list reducer -- handles the state for the product list on the homepage
@@ -30,7 +33,6 @@ export const productListReducer = (state = { products: [] }, action) => {
 };
 
 // PRODUCT DETAILS REDUCER
-
 export const productDetailsReducer = (
   state = { product: { reviews: [] } },
   action
@@ -47,6 +49,20 @@ export const productDetailsReducer = (
 
     //product DETAIL fails -
     case PRODUCT_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const productDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PRODUCT_DELETE_REQUEST:
+      return { loading: true };
+    case PRODUCT_DELETE_SUCCESS:
+      //set success value to true bc nothings returning from server
+      return { loading: false, success: true };
+    case PRODUCT_DELETE_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
