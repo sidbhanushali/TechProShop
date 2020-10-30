@@ -2,17 +2,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PayPalButton } from "react-paypal-button-v2";
 import { Link } from "react-router-dom";
-import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { getOrderDetails, payOrder } from "../actions/orderActions";
-import { ORDER_PAY_RESET } from "../constants/orderConstants";
+import {
+  getOrderDetails,
+  payOrder,
+  deliverOrder,
+} from "../actions/orderActions";
+import {
+  ORDER_PAY_RESET,
+  ORDER_DELIVER_RESET,
+} from "../constants/orderConstants";
 
 const OrderScreen = ({ match }) => {
+  //get id from URL params using props.match
   const orderId = match.params.id;
-
-  //component state to check readiness of PayPal SDK
+  //component state to init PayPal SDK laoder
   const [sdkReady, setSdkReady] = useState(false);
 
   const dispatch = useDispatch();
@@ -23,6 +30,13 @@ const OrderScreen = ({ match }) => {
   //check for loading: true and success from ORDER_PAY_SUCCESS action
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
+  //get logged in user obj from localstorage to check isAdmin for Delivered button
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   if (!loading) {
     //   Calculate prices
@@ -35,7 +49,7 @@ const OrderScreen = ({ match }) => {
     );
   }
 
-  //dynamically build sript
+  //dynamically build sript to append paypal SDK script
   useEffect(() => {
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get("/api/config/paypal");
@@ -44,32 +58,34 @@ const OrderScreen = ({ match }) => {
       script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
       script.async = true;
       script.onload = () => {
-        //set paypal ready to true
         setSdkReady(true);
-      }; //add script element to body
+      };
       document.body.appendChild(script);
     };
 
-    //if succeessPay (from ORDER_PAY_SUCCESS) is true then reset the order and it will show isPaid as true
-    if (!order || successPay) {
-      // pay_reset prevents endless refresh loop
+    //if succeessPay (from ORDER_PAY_SUCCESS) is true  OR successDeliver is triggered then reset the order and it will show isPaid as true
+    if (!order || successPay || successDeliver) {
       dispatch({ type: ORDER_PAY_RESET });
+      dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
-      //check if paypal script is initialized
       if (!window.paypal) {
         addPayPalScript();
       } else {
-        //if order not paid add sdk script
         setSdkReady(true);
       }
     }
-  }, [dispatch, orderId, successPay, order]);
+  }, [dispatch, orderId, successPay, successDeliver, order]);
 
-  // for paypal button
+  //for paypal button success
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult);
     dispatch(payOrder(orderId, paymentResult));
+  };
+
+  //for admin deliver button
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
   };
 
   return loading ? (
@@ -182,7 +198,7 @@ const OrderScreen = ({ match }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {/* if order is not paid, show loader if sdk not ready, else show paypal btn */}
+              {/* if order is not paid, show loader if sdk not ready show loader, else show paypal btn */}
               {!order.isPaid && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
@@ -194,6 +210,19 @@ const OrderScreen = ({ match }) => {
                       onSuccess={successPaymentHandler}
                     />
                   )}
+                </ListGroup.Item>
+              )}
+              {loadingDeliver && <Loader />}
+              {/* only show the admin delivered button if loggedin User is admin, and order.paid is true */}
+              {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button
+                    type='button'
+                    className='btn btn-block'
+                    onClick={deliverHandler}
+                  >
+                    Mark As Delivered
+                  </Button>
                 </ListGroup.Item>
               )}
             </ListGroup>

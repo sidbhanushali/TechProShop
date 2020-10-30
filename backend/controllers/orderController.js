@@ -93,7 +93,7 @@ const getOrders = asyncHandler(async (req, res) => {
 // controller fot  GET /api/orders/:id/deliver --> admin Update order to delivered
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
-
+  //get the order object by id and update the two fields for delivery
   if (order) {
     order.isDelivered = true;
     order.deliveredAt = Date.now();

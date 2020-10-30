@@ -6,6 +6,7 @@ import {
   updateOrderToPaid,
   getMyOrders,
   getOrders,
+  updateOrderToDelivered,
 } from "../controllers/orderController.js";
 import { protectRoute, checkAdmin } from "../middleware/authMiddleware.js";
 
@@ -20,10 +21,13 @@ router.get("/myorders", protectRoute, getMyOrders);
 //GET route for /api/orders/:id --> create new order
 router.get("/:id", protectRoute, getOrderById);
 
-//PUT route for /api/orders/:id/pay --> for admin to update order status
+//PUT route for /api/orders/:id/pay --> for admin to update order pay
 router.put("/:id/pay", protectRoute, updateOrderToPaid);
 
 //GET route for /api/orders --> admin order list get all orders
 router.get("/", protectRoute, checkAdmin, getOrders);
+
+//PUT route for /api/orders/:id/pay --> for admin to update order status
+router.put("/:id/deliver", protectRoute, checkAdmin, updateOrderToDelivered);
 
 export default router;
