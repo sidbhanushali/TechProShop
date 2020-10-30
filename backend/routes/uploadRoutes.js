@@ -43,6 +43,7 @@ const upload = multer({
   },
 });
 
+//upload object has .single method so we only want 1 image at a time per upload
 router.post("/", upload.single("image"), (req, res) => {
   res.send(`/${req.file.path}`);
 });
