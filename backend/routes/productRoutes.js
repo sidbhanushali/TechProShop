@@ -6,6 +6,7 @@ import {
   deleteProduct,
   createProduct,
   updateProduct,
+  createProductReview,
 } from "../controllers/productController.js";
 
 import { protectRoute, checkAdmin } from "../middleware/authMiddleware.js";
@@ -23,5 +24,8 @@ router.post("/", protectRoute, checkAdmin, createProduct);
 
 //@route PUT /api/products/:id -->only admins can update products
 router.put("/:id", protectRoute, checkAdmin, updateProduct);
+
+//route for POST /api/products/:id/reviews
+router.post("/:id/reviews", protectRoute, createProductReview);
 
 export default router;

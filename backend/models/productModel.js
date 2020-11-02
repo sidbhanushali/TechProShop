@@ -5,12 +5,18 @@ const reviewSchema = mongoose.Schema(
     name: { type: String, required: true },
     rating: { type: Number, required: true },
     comment: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
   },
   {
     timestamps: true,
   }
 );
 
+// each product will refer to the user schema and the review schema b/c the review schema refers to the user schema to relate the user to the review
 const productSchema = mongoose.Schema(
   {
     user: {
