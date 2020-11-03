@@ -3,6 +3,10 @@ import Product from "../models/productModel.js";
 
 //controller for public route  GET /api/products -- gets all products
 const getProducts = asyncHandler(async (req, res) => {
+  const pageSize = 5;
+  // url query will have the page number
+  const page = Number(req.query.pageNumber) || 1;
+
   //req.query pulls the querysrting from the URL
   const keyword = req.query.keyword
     ? {
@@ -14,10 +18,15 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     : {};
 
-  const products = await Product.find({ ...keyword });
+  //.count mongoose method is deprecitaed
+  const count = await Product.countDocuments({ ...keyword });
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize) //limit db query by page size
+    .skip(pageSize * (page - 1)); //gets the correct amount of products from the correct place (1st 10 prods, 2nd 10 products etc)
 
   //return all products or optional: all products matching keyword
-  res.json(products);
+  //round up the page and the pages(amount of total pages total queries/pagesize)
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 //controller for public route  GET /api/products -- gets single product by _objectID

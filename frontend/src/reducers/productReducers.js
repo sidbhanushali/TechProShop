@@ -33,8 +33,15 @@ export const productListReducer = (state = { products: [] }, action) => {
       return { loading: true, products: [] };
 
     //product list success - successful response
+
+    //payload from API is { products, page, pages}
     case PRODUCT_LIST_SUCCESS:
-      return { loading: false, products: action.payload };
+      return {
+        loading: false,
+        products: action.payload.products,
+        pages: action.payload.pages,
+        page: action.payload.page,
+      };
 
     //product list fails -
     case PRODUCT_LIST_FAIL:
