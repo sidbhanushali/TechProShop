@@ -7,6 +7,7 @@ import {
   createProduct,
   updateProduct,
   createProductReview,
+  getTopProducts,
 } from "../controllers/productController.js";
 
 import { protectRoute, checkAdmin } from "../middleware/authMiddleware.js";
@@ -15,6 +16,9 @@ router.get("/", getProducts);
 
 // @route   GET /api/products/:id
 router.get("/:id", getProductById);
+
+//@route GET /api/products/top --> returns top 3 products sorted by reviews
+router.get("/top", getTopProducts);
 
 // @route  DELETE /api/products/:id -- ADMIN ROUTE
 router.delete("/:id", protectRoute, checkAdmin, deleteProduct);

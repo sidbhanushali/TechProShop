@@ -38,11 +38,13 @@ const App = () => {
           <Route path='/cart/:id?' component={CartScreen} />
           <Route path='/admin/userlist' component={UserListScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
+          {/* productList with no pagenum in url */}
           <Route
             path='/admin/productlist'
             component={ProductListScreen}
             exact
           />
+          {/* productlist with pagenumber */}
           <Route
             path='/admin/productlist/:pageNumber'
             component={ProductListScreen}
