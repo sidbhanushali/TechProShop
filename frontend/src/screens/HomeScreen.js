@@ -1,22 +1,24 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-//redux imports
-import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../actions/productActions";
-//react-bootsrap import
-import { Row, Col } from "react-bootstrap";
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
+  //keyword inside the URL query
+  const keyword = match.params.keyword;
+
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productList);
   const { loading, error, products } = productList;
 
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    //pass in keyword from URL into listProducts action (GETs all products from API or optional ?keyword=${keyword}
+    dispatch(listProducts(keyword));
+  }, [dispatch, keyword]);
 
   return (
     <>

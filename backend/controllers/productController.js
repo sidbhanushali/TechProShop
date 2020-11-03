@@ -3,8 +3,20 @@ import Product from "../models/productModel.js";
 
 //controller for public route  GET /api/products -- gets all products
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  //return all products
+  //req.query pulls the querysrting from the URL
+  const keyword = req.query.keyword
+    ? {
+        //use regex to avoid having to type direct search term
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+
+  const products = await Product.find({ ...keyword });
+
+  //return all products or optional: all products matching keyword
   res.json(products);
 });
 
