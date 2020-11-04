@@ -39,6 +39,7 @@ Frontend:
 - react-router-bootstrap
 - react-router-dom
 - react-scripts
+- react-helmet
 
 ---
 
