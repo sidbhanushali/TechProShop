@@ -29,7 +29,7 @@ const getProducts = asyncHandler(async (req, res) => {
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
-//controller for public route  GET /api/products -- gets single product by _objectID
+// Controller for public route  GET /api/products -- gets single product by _objectID
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
