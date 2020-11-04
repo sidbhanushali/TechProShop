@@ -29,6 +29,11 @@ Button:hover {
   transform: scale(1.1) !important;
 }
 
+ul.pagination {
+  display: flex !important;
+  justify-content: center !important;
+}
+
 /* carousel */
 .carousel-item-next,
 .carousel-item-prev,
@@ -38,6 +43,8 @@ Button:hover {
 .carousel-caption {
   position: absolute;
   top: 0;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .carousel-caption h2 {
@@ -46,10 +53,18 @@ Button:hover {
 
 .carousel img {
   height: 300px;
-  padding: 30px;
+  padding: 40px;
   margin: 40px;
   border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .carousel a {
   margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .carousel-caption h2 {
+    font-size: 2.5vw;
+  }
 }
