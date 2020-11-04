@@ -30,9 +30,23 @@ app.get("/api/config/paypal", (req, res) =>
 
 //static uploads folder
 //__dirname not available if using ES6 imports with node.js
-//creating a variable that will point to the same thing
-const dirname_sub = path.resolve();
-app.use("/uploads", express.static(path.join(dirname_sub, "/uploads")));
+//creating a variable w/ path.resolvethat will point to the same thing
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
+// if node.env is production, set /frontend/build as static folder to load index.html
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
+
+  //for any route that isnt from our api/from this file(only frontend routes are built to index.html)
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running....");
+  });
+}
 
 //middleware
 app.use(notFound);
