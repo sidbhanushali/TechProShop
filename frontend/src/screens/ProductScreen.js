@@ -13,6 +13,7 @@ import {
 import Rating from "../components/Rating";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+
 import {
   listProductDetails,
   createProductReview,
@@ -36,19 +37,21 @@ const ProductScreen = ({ history, match }) => {
   const productReviewCreate = useSelector((state) => state.productReviewCreate);
   const {
     success: successProductReview,
+    loading: loadingProductReview,
     error: errorProductReview,
   } = productReviewCreate;
 
   useEffect(() => {
     //productReviewCreate.successProductReview
     if (successProductReview) {
-      alert("Review Submitted!");
       setRating(0);
       setComment("");
+    }
+    if (!product._id || product._id !== match.params.id) {
+      //listProductDetails action takes in an product ID param to make the axiosREQ
+      dispatch(listProductDetails(match.params.id));
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
     }
-    //listProductDetails action takes in an product ID param to make the axiosREQ
-    dispatch(listProductDetails(match.params.id));
   }, [dispatch, match, successProductReview]);
 
   const addToCartHandler = () => {
@@ -58,6 +61,7 @@ const ProductScreen = ({ history, match }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     //createProductReview action takes in product ID and review object(state)
+
     dispatch(
       createProductReview(match.params.id, {
         rating,
@@ -156,8 +160,8 @@ const ProductScreen = ({ history, match }) => {
               </Card>
             </Col>
           </Row>
-          {/* REVIEWS FORM inside product model (product.reviews) */}
           <Row>
+            {/* REVIEWS FORM inside product model (product.reviews) */}
             <Col md={6}>
               <h2>Reviews</h2>
               {product.reviews.length === 0 && <Message>No Reviews</Message>}
@@ -171,14 +175,20 @@ const ProductScreen = ({ history, match }) => {
                     <p>{review.comment}</p>
                   </ListGroup.Item>
                 ))}
-                {/* WRITE A REVIEW FORM */}
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
+                  {/* on review succes firing off show message component */}
+                  {successProductReview && (
+                    <Message variant='success'>
+                      Review submitted successfully
+                    </Message>
+                  )}
+                  {loadingProductReview && <Loader />}
                   {/* if errorProductReview (from productCreateReview reducer) */}
                   {errorProductReview && (
                     <Message variant='danger'>{errorProductReview}</Message>
                   )}
-                  {/* only show if userInfo is populated with userLogin info */}
+                  {/* WRITE A REVIEW FORM - onlyshow this if userInfo if populated */}
                   {userInfo ? (
                     <Form onSubmit={submitHandler}>
                       <Form.Group controlId='rating'>
@@ -205,14 +215,17 @@ const ProductScreen = ({ history, match }) => {
                           onChange={(e) => setComment(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
-                      <Button type='submit' variant='primary'>
+                      <Button
+                        disabled={loadingProductReview}
+                        type='submit'
+                        variant='primary'
+                      >
                         Submit
                       </Button>
                     </Form>
                   ) : (
-                    // if !userInfo
                     <Message>
-                      Please <Link to='/login'>sign in</Link> to write a review{" "}
+                      Please <Link to='/login'>sign in</Link> to write a review
                     </Message>
                   )}
                 </ListGroup.Item>
