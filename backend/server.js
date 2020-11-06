@@ -32,7 +32,7 @@ app.get("/api/config/paypal", (req, res) =>
 //__dirname not available if using ES6 imports with node.js
 //creating a variable w/ path.resolvethat will point to the same thing
 const __dirname = path.resolve();
-app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+app.use("/uploads", express.static("uploads"));
 
 // if node.env is production, set /frontend/build as static folder to load index.html
 if (process.env.NODE_ENV === "production") {
