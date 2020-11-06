@@ -3,7 +3,7 @@ import Product from "../models/productModel.js";
 
 //controller for public route  GET /api/products -- gets all products
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 5;
+  const pageSize = 8;
   // url query will have the page number
   const page = Number(req.query.pageNumber) || 1;
 
